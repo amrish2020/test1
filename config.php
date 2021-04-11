@@ -77,6 +77,11 @@ class Config{
         return $result;
     }
 
+    /**
+     * @param mixed $search
+     * 
+     * @return array data
+     */
     public function selectRecord($search){
         $sql = "SELECT `file_name`,`parent_id`,`id` from doclist WHERE LOWER(`file_name`) LIKE '%$search%' ";
         $result = $this->dbc->query($sql);
@@ -96,6 +101,12 @@ class Config{
         return $tree;
     }
 
+	/**
+	 * @param int $parent
+	 * @param string $tree_array
+	 * 
+	 * @return array data
+	 */
 	function fetchTreeList($parent = 0, $tree_array = '') {
         
 		if (!is_array($tree_array))
@@ -113,6 +124,4 @@ class Config{
         }
 		return $tree_array; 
 	}
-    
-
 }
