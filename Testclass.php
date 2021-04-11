@@ -1,6 +1,10 @@
 <?php
 include('config.php');
 
+/*
+Class name : Testclass
+
+*/
 class Testclass {
 
     public function __construct()
@@ -8,6 +12,12 @@ class Testclass {
         
     }
 
+    /**
+     * @param mixed $files
+     * 
+     * Insert into database
+     * @return 
+     */
     public function Uploadfiles($files){
         $db = new Config();
         //$yaml = file_get_contents('test.yaml');
@@ -55,12 +65,22 @@ class Testclass {
         header('Location: '.'index.php');
     }
 
+    /**
+     * @param $search
+     * 
+     * @return array
+     */
     public function searchText($search){
         $db = new Config();
         $data = $db->selectData($search);
         return $data;
     }
 
+    /**
+     * @param mixed $search
+     * 
+     * @return array
+     */
     public function searchTree($search){
         $db = new Config();
         $res =  $db->getTreeRecord($search);

@@ -13,25 +13,23 @@
 
 
 -- Dumping database structure for test1
-DROP DATABASE IF EXISTS `test1`;
 CREATE DATABASE IF NOT EXISTS `test1` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `test1`;
 
 -- Dumping structure for table test1.doclist
-DROP TABLE IF EXISTS `doclist`;
 CREATE TABLE IF NOT EXISTS `doclist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_category_parent` (`parent_id`),
+  KEY `name` (`name`),
   CONSTRAINT `fk_category_parent` FOREIGN KEY (`parent_id`) REFERENCES `doclist` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table test1.filepath
-DROP TABLE IF EXISTS `filepath`;
 CREATE TABLE IF NOT EXISTS `filepath` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -43,36 +41,36 @@ CREATE TABLE IF NOT EXISTS `filepath` (
 -- Data exporting was unselected.
 
 -- Dumping structure for function test1.getpath
-DROP FUNCTION IF EXISTS `getpath`;
 DELIMITER //
-CREATE FUNCTION `getpath`(cat_id INT) RETURNS text CHARSET latin1
+CREATE FUNCTION `getpath`(
+	`f_id` INT
+) RETURNS text CHARSET latin1
     DETERMINISTIC
 BEGIN
     DECLARE res TEXT;
-    CALL getpath(cat_id, res);
+    CALL getpath(f_id, res);
     RETURN res;
 END//
 DELIMITER ;
 
 -- Dumping structure for procedure test1.getpath
-DROP PROCEDURE IF EXISTS `getpath`;
 DELIMITER //
 CREATE PROCEDURE `getpath`(
-	IN `cat_id` INT,
+	IN `f_id` INT,
 	OUT `path` TEXT
 )
 BEGIN
-    DECLARE catname VARCHAR(20);
+    DECLARE pathname VARCHAR(200);
     DECLARE temppath TEXT;
     DECLARE tempparent INT;
     SET max_sp_recursion_depth = 255;
-    SELECT name, parent_id FROM doclist WHERE id=cat_id INTO catname, tempparent;
+    SELECT name, parent_id FROM doclist WHERE id=f_id INTO pathname, tempparent;
     IF tempparent IS NULL
     THEN
-        SET path = catname;
+        SET path = pathname;
     ELSE
         CALL getpath(tempparent, temppath);
-        SET path = CONCAT(temppath, '\\', catname);
+        SET path = CONCAT(temppath, '\\', pathname);
     END IF;
 END//
 DELIMITER ;

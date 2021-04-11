@@ -20,12 +20,25 @@ class Config{
         } 
     }
 
+    /**
+     * @param mixed $path
+     * @param mixed $name
+     * 
+     * 
+     */
     public function insertPath($path,$name){
         $date = date('Y-m-d h:i:s');
         $result = mysqli_query($this->dbc,"INSERT INTO filepath (`path`,`name`,`created`) VALUES('$path','$name','$date')");
         return $result;
     }
 
+    /**
+     * @param null $parentid
+     * @param mixed $filename
+     * @param mixed $type
+     * 
+     * @return [type]
+     */
     public function insertTree($parentid = null,$filename,$type){
         $date = date('Y-m-d h:i:s');
         if($parentid == '')
@@ -42,12 +55,22 @@ class Config{
         mysqli_query($this->dbc,"TRUNCATE `doclist`");
     }
 
+    /**
+     * @param mixed $search
+     * 
+     * @return result in array
+     */
     public function selectData($search){
         $sql = "SELECT `path` from filepath WHERE LOWER(`name`) LIKE '%$search%' ";
         $result = $this->dbc->query($sql);
         return $result;
     }
 
+    /**
+     * @param mixed $search
+     * 
+     * @return result in array
+     */
     public function getTreeRecord($search){
         $sql = "SELECT id, name, getpath(id) AS path FROM doclist HAVING path LIKE '%$search%'";
         $result = $this->dbc->query($sql);
@@ -93,5 +116,3 @@ class Config{
     
 
 }
-
-?>
